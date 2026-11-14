@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape
 RAIZ = Path(__file__).resolve().parent.parent
 SAIDA = RAIZ / "diagramas" / "fontes" / "01-caso-de-uso-geral.svg"
 
-ROXO, ROXO_ESCURO, UVA, LIMA = "#3a0244", "#24012b", "#b140f6", "#b6ff23"
+ROXO, ROXO_ESCURO, UVA, LIMA = "#000000", "#000000", "#000000", "#000000"
 W, H = 1560, 1560
 
 # Casos de uso: (id, texto, coluna, linha)
@@ -103,18 +103,18 @@ def borda_elipse(cx, cy, tx, ty):
 partes = [
     f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" font-family="Rubik, Arial, sans-serif">',
     """<defs>
-    <marker id="seta" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#3a0244" stroke-width="1.5"/></marker>
-    <marker id="heranca" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="14" markerHeight="14" orient="auto-start-reverse"><path d="M0,0 L12,6 L0,12 Z" fill="#fff" stroke="#3a0244" stroke-width="1.5"/></marker>
+    <marker id="seta" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#000000" stroke-width="1.5"/></marker>
+    <marker id="heranca" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="14" markerHeight="14" orient="auto-start-reverse"><path d="M0,0 L12,6 L0,12 Z" fill="#fff" stroke="#000000" stroke-width="1.5"/></marker>
   </defs>
   <style>
-    .uc { font-size: 17px; fill: #24012b; }
-    .id { font-size: 12px; fill: #8e24d6; font-weight: 700; }
-    .ator { font-size: 19px; font-weight: 700; fill: #3a0244; }
-    .rot { font-size: 13px; fill: #8e24d6; font-style: italic; }
+    .uc { font-size: 17px; fill: #000000; }
+    .id { font-size: 12px; fill: #000000; font-weight: 700; }
+    .ator { font-size: 19px; font-weight: 700; fill: #000000; }
+    .rot { font-size: 13px; fill: #000000; font-style: italic; }
   </style>""",
     f'<rect width="{W}" height="{H}" fill="#fff"/>',
     f'<text x="{W / 2}" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="{ROXO}">Diagrama de Caso de Uso Geral — Plataforma Deboa Açaí</text>',
-    f'<rect x="320" y="90" width="900" height="{TOP + 12 * PASSO + 60 - 90}" rx="24" fill="#fffaf0" stroke="{ROXO}" stroke-width="3"/>',
+    f'<rect x="320" y="90" width="900" height="{TOP + 12 * PASSO + 60 - 90}" rx="24" fill="#ffffff" stroke="{ROXO}" stroke-width="3"/>',
     f'<text x="350" y="122" font-size="20" font-weight="700" fill="{ROXO}">Sistema: deboaacai.com.br</text>',
 ]
 
@@ -137,7 +137,7 @@ for filho, pai in GENERALIZACOES:
 for cid, texto, _c, _l in CASOS:
     x, y = pos(cid)
     externo = cid in ("UC25", "UC26")
-    partes.append(f'<ellipse cx="{x}" cy="{y}" rx="{RX}" ry="{RY}" fill="{"#f3e3fe" if externo else "#fff"}" stroke="{ROXO}" stroke-width="2.2"/>')
+    partes.append(f'<ellipse cx="{x}" cy="{y}" rx="{RX}" ry="{RY}" fill="{"#e6e6e6" if externo else "#fff"}" stroke="{ROXO}" stroke-width="2.2"/>')
     partes.append(f'<text x="{x}" y="{y - 6}" text-anchor="middle" class="id">{cid}</text>')
     partes.append(f'<text x="{x}" y="{y + 15}" text-anchor="middle" class="uc">{escape(texto)}</text>')
 
@@ -154,7 +154,7 @@ for a, b, rot in INCLUDES:
 for nome, (x, y) in ATORES.items():
     partes.append(ator(nome, x, y))
 
-partes.append(f'<text x="40" y="{H - 24}" font-size="14" fill="{ROXO}">Casos em lilás são disparados por atores externos: Mercado Pago (gateway de pagamento) e Agendador (funções agendadas Netlify / pg_cron). Setas de ponta branca = generalização. O estorno (UC19) também é enviado ao Mercado Pago.</text>')
+partes.append(f'<text x="40" y="{H - 24}" font-size="14" fill="{ROXO}">Casos em cinza são disparados por atores externos: Mercado Pago (gateway de pagamento) e Agendador (funções agendadas Netlify / pg_cron). Setas de ponta branca = generalização. O estorno (UC19) também é enviado ao Mercado Pago.</text>')
 partes.append("</svg>")
 
 SAIDA.parent.mkdir(parents=True, exist_ok=True)

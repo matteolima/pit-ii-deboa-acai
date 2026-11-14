@@ -22,9 +22,9 @@ async function mermaid(src, out) {
   <script>${MERMAID}</script>
   <script>
     mermaid.initialize({ startOnLoad:false, theme:"base", fontFamily:"Arial, sans-serif",
-      themeVariables:{ primaryColor:"#f3e3fe", primaryBorderColor:"#3a0244", primaryTextColor:"#24012b",
-        lineColor:"#3a0244", secondaryColor:"#fffaf0", tertiaryColor:"#fffaf0", actorBkg:"#f3e3fe",
-        actorBorder:"#3a0244", noteBkgColor:"#fff6c2", noteBorderColor:"#c9a800", fontSize:"16px" },
+      themeVariables:{ primaryColor:"#ffffff", primaryBorderColor:"#000000", primaryTextColor:"#000000",
+        lineColor:"#000000", secondaryColor:"#ffffff", tertiaryColor:"#ffffff", actorBkg:"#ffffff",
+        actorBorder:"#000000", actorTextColor:"#000000", signalColor:"#000000", signalTextColor:"#000000", labelBoxBkgColor:"#ffffff", labelBoxBorderColor:"#000000", loopTextColor:"#000000", sequenceNumberColor:"#ffffff", noteBkgColor:"#f2f2f2", noteBorderColor:"#000000", noteTextColor:"#000000", edgeLabelBackground:"#ffffff", clusterBkg:"#ffffff", clusterBorder:"#000000", titleColor:"#000000", classText:"#000000", fontSize:"16px" },
       sequence:{ useMaxWidth:false, mirrorActors:false, wrap:true, width:170, actorMargin:40, noteMargin:8, messageMargin:30 }, flowchart:{ useMaxWidth:false, htmlLabels:true }, class:{ useMaxWidth:false }, classDiagram:{ useMaxWidth:false } });
     mermaid.render("g", ${JSON.stringify(code)}).then(r => { const d=document.getElementById("d"); d.innerHTML = r.svg; const svg=d.querySelector("svg"); const vb=svg.viewBox.baseVal; svg.removeAttribute("style"); svg.setAttribute("width", vb.width); svg.setAttribute("height", vb.height); document.title = "ok"; })
       .catch(e => { document.title = "erro: " + e.message; });

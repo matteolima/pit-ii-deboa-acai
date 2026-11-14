@@ -187,3 +187,6 @@ PROBLEMAS_CORRIGIDOS = [
     ("No celular, o administrador não via o botão de acesso ao painel.", "Botão “Painel” visível no topo para a equipe."),
     ("Função interna de estoque podia ser executada por usuário anônimo.", "Permissão revogada e privilégios padrão ajustados (migração de segurança)."),
 ]
+
+# Laudo de qualidade: preencher com as respostas reais dos 5 colegas (nome, data, funcionou, não funcionou, não testado)
+LAUDO = [("", "", "", "", "")] * 5

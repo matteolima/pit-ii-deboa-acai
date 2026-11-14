@@ -9,7 +9,6 @@ import sys
 from pathlib import Path
 
 from docx import Document
-from docx.enum.section import WD_ORIENT
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.oxml import OxmlElement
@@ -21,36 +20,48 @@ import conteudo as C  # noqa: E402
 
 RAIZ = Path(__file__).resolve().parent.parent
 DOCS = RAIZ / "docs"
-ROXO = RGBColor(0x3A, 0x02, 0x44)
 
 
 # ---------------- utilidades ----------------
+MODELO = RAIZ / "ferramentas" / "modelo" / "modelo-cruzeiro-do-sul.docx"
+PRETO = RGBColor(0, 0, 0)
+LARG = 15.0  # largura útil (cm) do papel timbrado: A4 com margens de 3 cm
+
+
 def novo_doc():
-    d = Document()
-    s = d.sections[0]
-    s.page_width, s.page_height = Cm(21), Cm(29.7)
-    s.left_margin = s.top_margin = Cm(3)
-    s.right_margin = s.bottom_margin = Cm(2)
-    st = d.styles["Normal"]
+    """Abre o modelo da universidade (papel timbrado no cabeçalho) e esvazia o corpo."""
+    d = Document(str(MODELO))
+    body = d.element.body
+    for el in list(body):
+        if not el.tag.endswith("sectPr"):
+            body.remove(el)
+    for rid, rel in list(d.part.rels.items()):  # remove as imagens do documento antigo
+        if rel.reltype.endswith("/image"):
+            del d.part.rels[rid]
+    st = d.styles["normal"]
     st.font.name = "Arial"
-    st.element.rPr.rFonts.set(qn("w:eastAsia"), "Arial")
-    st.font.size = Pt(12)
-    st.paragraph_format.line_spacing = 1.5
-    st.paragraph_format.space_after = Pt(6)
-    for n, sz in (("Heading 1", 16), ("Heading 2", 14), ("Heading 3", 12)):
+    st.element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:hAnsi"), "Arial")
+    st.font.size = Pt(11)
+    st.font.color.rgb = PRETO
+    for n, sz in (("Heading 1", 18), ("Heading 2", 14), ("Heading 3", 12)):
         h = d.styles[n]
         h.font.name = "Arial"
-        h.element.rPr.rFonts.set(qn("w:ascii"), "Arial")
-        h.element.rPr.rFonts.set(qn("w:hAnsi"), "Arial")
+        rf = h.element.get_or_add_rPr().get_or_add_rFonts()
+        for k in ("w:ascii", "w:hAnsi", "w:cs", "w:eastAsia"):
+            rf.set(qn(k), "Arial")
         h.font.size = Pt(sz)
         h.font.bold = True
-        h.font.color.rgb = ROXO
-        h.paragraph_format.space_before = Pt(12)
-    # rodapé com número de página
-    p = s.footer.paragraphs[0]
-    p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    campo(p, "PAGE")
+        h.font.color.rgb = PRETO
+    d.styles["Heading 1"].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
     return d
+
+
+def titulo(d, texto, nivel=1):
+    h = d.add_heading(texto, nivel)
+    for r in h.runs:
+        r.font.color.rgb = PRETO
+        r.font.name = "Arial"
+    return h
 
 
 def campo(par, instr):
@@ -92,13 +103,26 @@ def par(d, texto, negrito_ate=None, estilo=None):
 
 
 def lista(d, itens, numerada=False):
-    for i in itens:
-        p = d.add_paragraph(style="List Number" if numerada else "List Bullet")
-        p.add_run(i)
+    for k, i in enumerate(itens):
+        p = d.add_paragraph()
+        p.paragraph_format.left_indent = Cm(0.6)
+        p.paragraph_format.first_line_indent = Cm(-0.5)
         p.paragraph_format.space_after = Pt(2)
+        p.add_run(f"{k + 1}. " if numerada else "• ")
+        p.add_run(i)
 
 
-def sombrear(cel, cor="F3E3FE"):
+def bordas(t):
+    tblPr = t._tbl.tblPr
+    b = OxmlElement("w:tblBorders")
+    for lado in ("top", "left", "bottom", "right", "insideH", "insideV"):
+        e = OxmlElement(f"w:{lado}")
+        e.set(qn("w:val"), "single"); e.set(qn("w:sz"), "6"); e.set(qn("w:space"), "0"); e.set(qn("w:color"), "000000")
+        b.append(e)
+    tblPr.append(b)
+
+
+def sombrear(cel, cor="FFFFFF"):
     tcPr = cel._tc.get_or_add_tcPr()
     sh = OxmlElement("w:shd"); sh.set(qn("w:val"), "clear"); sh.set(qn("w:color"), "auto"); sh.set(qn("w:fill"), cor)
     tcPr.append(sh)
@@ -106,13 +130,12 @@ def sombrear(cel, cor="F3E3FE"):
 
 def tabela(d, cab, linhas, larg=None, tam=10):
     t = d.add_table(rows=1, cols=len(cab))
-    t.style = "Table Grid"
+    bordas(t)
     t.alignment = WD_TABLE_ALIGNMENT.CENTER
     for i, c in enumerate(cab):
         cel = t.rows[0].cells[i]
         cel.text = ""
         r = cel.paragraphs[0].add_run(c); r.bold = True; r.font.size = Pt(tam)
-        sombrear(cel)
     for ln in linhas:
         cells = t.add_row().cells
         for i, v in enumerate(ln):
@@ -123,6 +146,8 @@ def tabela(d, cab, linhas, larg=None, tam=10):
                 pp.paragraph_format.space_after = Pt(0)
                 pp.add_run(parte).font.size = Pt(tam)
     if larg:
+        f = min(1.0, LARG / sum(larg))
+        larg = [w * f for w in larg]
         for row in t.rows:
             for i, w in enumerate(larg):
                 row.cells[i].width = Cm(w)
@@ -135,7 +160,7 @@ def png_tam(path):
     return struct.unpack(">II", b[16:24])
 
 
-def imagem(d, path, legenda, max_w=16.0, max_h=21.0):
+def imagem(d, path, legenda, max_w=LARG, max_h=21.0):
     path = Path(path)
     if not path.exists():
         par(d, f"[imagem pendente: {path.name}]")
@@ -148,110 +173,60 @@ def imagem(d, path, legenda, max_w=16.0, max_h=21.0):
     r = c.add_run(legenda); r.italic = True; r.font.size = Pt(10)
 
 
-def secao(d, paisagem):
-    s = d.add_section()
-    if paisagem:
-        s.orientation = WD_ORIENT.LANDSCAPE
-        s.page_width, s.page_height = Cm(29.7), Cm(21)
-    else:
-        s.orientation = WD_ORIENT.PORTRAIT
-        s.page_width, s.page_height = Cm(21), Cm(29.7)
-    s.left_margin = s.top_margin = Cm(3 if not paisagem else 2)
-    s.right_margin = s.bottom_margin = Cm(2)
-    return s
+def girado(path):
+    """Cópia girada 90° (para diagramas largos ocuparem a página em pé, como no modelo)."""
+    import subprocess
+    out = RAIZ / "ferramentas" / ".cache" / f"{Path(path).stem}-girado.png"
+    out.parent.mkdir(exist_ok=True)
+    subprocess.run(["sips", "-r", "270", str(path), "--out", str(out)], check=True, capture_output=True)
+    return out
 
 
-def capa(d, titulo, subtitulo):
-    centro(d, C.INSTITUICAO.upper(), 14, True)
-    centro(d, f"Curso de {C.CURSO}", 12)
-    centro(d, C.DISCIPLINA, 12, depois=120)
-    centro(d, C.ALUNO, 14, True)
-    centro(d, f"RGM: {C.RGM}", 12, depois=120)
-    centro(d, titulo, 20, True)
-    centro(d, subtitulo, 13, depois=160)
-    centro(d, f"Imperatriz – MA · {C.SEMESTRE}", 12)
-    quebra(d)
-
-
-def sumario(d):
-    d.add_heading("Sumário", 1)
-    campo(d.add_paragraph(), 'TOC \\o "1-2" \\h \\z \\u')
-    quebra(d)
+def cabecalho_aluno(d, extra=None):
+    for t in (f"Nome: {C.ALUNO}", f"RGM: {C.RGM}"):
+        p = d.add_paragraph(); r = p.add_run(t); r.bold = True
+    if extra:
+        par(d, extra)
 
 
 # ---------------- Documentação ----------------
 def documentacao():
     d = novo_doc()
-    capa(d, "Plataforma Deboa Açaí", "Documentação do projeto: Soluções 1, 2 e 3")
-    sumario(d)
+    cabecalho_aluno(d, f"Projeto: Plataforma de pedidos e gestão Deboa Açaí – {C.SITE}")
 
-    d.add_heading("1. Introdução", 1)
-    par(d, "A Deboa Açaí é uma açaiteria de Imperatriz-MA que recebia pedidos apenas pelo WhatsApp, com anotações manuais, "
-           "erros de valores, demora no atendimento e nenhum controle de estoque ou faturamento. Este Projeto Integrador "
-           "documenta a plataforma própria de pedidos e gestão desenvolvida para a loja, publicada em produção em "
-           f"{C.SITE} e em uso com vendas reais desde novembro de 2026.")
-    par(d, "Objetivo geral: permitir que o cliente monte o açaí do seu jeito, pague online (Pix ou cartão) e acompanhe o pedido, "
-           "enquanto a equipe recebe, prepara, imprime e entrega os pedidos em um painel único, e o proprietário administra "
-           "cardápio, estoque, marketing e financeiro.")
-    d.add_heading("1.1 Escopo", 2)
-    lista(d, ["Loja virtual responsiva e instalável (PWA) para clientes.",
-              "Pagamentos online pelo Mercado Pago (Pix e cartão de crédito) com confirmação automática.",
-              "Painel operacional em tempo real para a equipe, pedidos de balcão e impressão de comandas Bluetooth.",
-              "Painel administrativo: cardápio, opções, estoque com fichas técnicas, financeiro, marketing, clientes, equipe, auditoria e ajuda.",
-              "Conformidade com a LGPD: consentimentos, exportação/exclusão de dados e rotina de retenção."])
-    d.add_heading("1.2 Tecnologias e arquitetura", 2)
-    tabela(d, ["Camada", "Tecnologia"], [
-        ("Front-end", "Next.js 16 (React 19, TypeScript), Tailwind CSS 4, PWA"),
-        ("Back-end", "Next.js Server Actions e rotas de API (Node.js 22, TypeScript); funções PL/pgSQL no banco"),
-        ("Banco de dados", "PostgreSQL (Supabase) com Row Level Security, Realtime e Storage"),
-        ("Integrações", "Mercado Pago (pagamentos), Amazon Location Service (endereços e distâncias), Google Identity (login), Web Push"),
-        ("Hospedagem", "Netlify (aplicação e funções agendadas) + Supabase (banco e autenticação)"),
-        ("Testes", "Vitest + PGlite (unidade e integração com banco real em memória) e Playwright (ponta a ponta)"),
-    ], [4, 12])
-    par(d, "Observação sobre a linguagem: as orientações sugerem MVC em Java, PHP, C#/.NET ou Python. A plataforma foi construída "
-           "em TypeScript (Node.js) por ser a mesma linguagem no front-end e no back-end e pelo suporte nativo do Next.js. "
-           "A organização em camadas corresponde ao padrão MVC conforme a tabela abaixo.")
-    tabela(d, ["Papel MVC", "Onde está no código"], C.ARQUITETURA_MVC, [4, 12])
-
-    # ---------- Solução 1 ----------
-    quebra(d)
-    d.add_heading("Solução 1 – Histórias de Usuário", 1)
-    par(d, "As histórias foram levantadas com o proprietário da loja e com a operação real dos primeiros dias de vendas. "
-           "Atores: Cliente (inclui o visitante não logado), Atendente, Gerente e Proprietário.")
+    titulo(d, "Solução – 1 (Histórias de Usuário):")
+    par(d, "A Deboa Açaí é uma açaiteria de Imperatriz-MA que recebia pedidos apenas pelo WhatsApp. A plataforma permite "
+           "que o cliente monte o açaí, pague online (Pix ou cartão) e acompanhe o pedido; a equipe opera um painel em tempo "
+           "real e o proprietário administra cardápio, estoque, marketing e financeiro. Atores: Cliente (inclui o visitante "
+           "não logado), Atendente, Gerente e Proprietário.")
     for h in C.HISTORIAS:
-        par(d, f"US{h[0]} – Como {h[1].lower()}, eu quero {h[3]}, para {h[4]}.")
-    quebra(d)
-    d.add_heading("Solução 1 – Cartões das Histórias", 1)
+        par(d, f"Como {h[1].lower()}, eu quero {h[3]}, para {h[4]}.")
     for (i, req, tit, quero, para, ca, rn, rnf, pri, pts) in C.HISTORIAS:
-        prio = " ".join(f"[{'X' if p == pri else ' '}] {p}" for p in "ABCDE")
-        tabela(d, ["Campo", f"US{i} – {tit}"], [
-            ("Requerente", req),
-            ("Ação", f"Eu quero {quero}."),
-            ("Objetivo", f"Para {para}."),
-            ("Critérios de aceitação", "\n".join(f"CA#{k + 1} – {x}" for k, x in enumerate(ca))),
-            ("Regras de negócio", "\n".join(f"RN#{k + 1} – {x}" for k, x in enumerate(rn))),
-            ("Requisitos não funcionais", "\n".join(f"RNF#{k + 1} – {x}" for k, x in enumerate(rnf))),
-            ("Prioridade", prio),
-            ("Pontos de história", str(pts)),
-        ], [4, 12])
-    d.add_heading("Solução 1 – Backlog Priorizado", 1)
-    ordem = sorted(C.HISTORIAS, key=lambda h: ("ABCDE".index(h[8]), -h[9], h[0]))
-    tabela(d, ["#", "ID", "História", "Requerente", "Prioridade", "Pontos"],
-           [(k + 1, f"US{h[0]}", h[2], h[1], h[8], h[9]) for k, h in enumerate(ordem)], [1, 1.6, 7.4, 2.6, 1.8, 1.6])
-    par(d, f"Total: {sum(h[9] for h in C.HISTORIAS)} pontos de história. Prioridade A = essencial para vender; E = desejável.")
-    d.add_heading("Solução 1 – Tarefas", 1)
-    par(d, "Tarefas técnicas derivadas de cada história. Todas foram concluídas na versão publicada; os itens marcados como "
-           "“correção” surgiram da operação real e foram tratados como novas tarefas.")
-    linhas = []
-    for h in C.HISTORIAS:
-        for t in C.TAREFAS.get(h[0], []):
-            linhas.append((f"US{h[0]}", t, "Concluída"))
-    tabela(d, ["História", "Tarefa", "Situação"], linhas, [2.2, 11.3, 2.5])
+        prio = " / ".join(f"[{'X' if p == pri else '  '}] {p}" for p in "ABCDE")
+        tabela(d, [f"ID: {i}", f"Título: {tit}"], [
+            ("Requerente:", req),
+            ("Ação:", f"Eu quero {quero}, para {para}."),
+            ("Critérios de aceitação:", "\n".join(f"CA#{k + 1} - {x}" for k, x in enumerate(ca))),
+            ("Regras de negócio:", "\n".join(f"RN#{k + 1} - {x}" for k, x in enumerate(rn))),
+            ("Requisito não funcional:", "\n".join(f"RNF#{k + 1} - {x}" for k, x in enumerate(rnf))),
+            ("Prioridade:", prio),
+            ("Pontos de história:", str(pts)),
+        ], [4.2, 10.8])
 
-    # ---------- Solução 2 ----------
+    titulo(d, "Solução – 1 (Backlog Priorizado):")
+    ordem = sorted(C.HISTORIAS, key=lambda h: ("ABCDE".index(h[8]), -h[9], h[0]))
+    tabela(d, ["ID", "História do Usuário", "Estimativa em Pontos", "Prioridade"],
+           [(h[0], h[2], h[9], k + 1) for k, h in enumerate(ordem)], [1.5, 8.5, 2.8, 2.2])
+    par(d, f"Total: {sum(h[9] for h in C.HISTORIAS)} pontos de história.")
+
+    titulo(d, "Solução – 1 (Tarefas):")
+    par(d, "Tarefas técnicas derivadas de cada história; todas concluídas na versão publicada.")
+    linhas = [(h[0], t, "Concluída") for h in C.HISTORIAS for t in C.TAREFAS.get(h[0], [])]
+    tabela(d, ["História", "Tarefa", "Situação"], linhas, [2, 10.5, 2.5])
+
     quebra(d)
-    d.add_heading("Solução 2 – Diagrama de Caso de Uso Geral", 1)
-    imagem(d, RAIZ / "diagramas/01-caso-de-uso-geral.png", "Figura 1 – Diagrama de caso de uso geral", 16, 21)
+    titulo(d, "Solução – 2 (Diagrama de caso de uso geral):")
+    imagem(d, RAIZ / "diagramas/01-caso-de-uso-geral.png", "Figura 1 – Diagrama de caso de uso geral", LARG, 20)
     tabela(d, ["Ator", "Descrição"], [
         ("Visitante", "Pessoa que navega na loja sem estar logada."),
         ("Cliente", "Visitante identificado (conta ou convidado com nome e WhatsApp) que faz pedidos. Especializa Visitante."),
@@ -260,88 +235,79 @@ def documentacao():
         ("Proprietário", "Gerente com acesso total: cardápio, preços, marketing, financeiro, equipe e configurações."),
         ("Mercado Pago", "Sistema externo de pagamentos (Pix e cartão) que notifica a plataforma por webhook."),
         ("Agendador", "Funções agendadas (Netlify e pg_cron) que expiram pedidos não pagos e conciliam pagamentos."),
-    ], [3.5, 12.5])
-    d.add_heading("Solução 2 – Casos de Uso Expandidos", 1)
+    ], [3.5, 11.5])
+
+    titulo(d, "Solução – 2 (Casos de uso expandidos):")
     for (uid, nome, atores, us, pre, pos, fluxo, alt) in C.CASOS:
-        d.add_heading(f"{uid} – {nome}", 3)
-        tabela(d, ["Campo", "Descrição"], [
-            ("Identificador", uid), ("Atores", atores), ("História relacionada", f"US{us}"),
-            ("Pré-condições", pre), ("Pós-condições", pos),
-            ("Fluxo principal", "\n".join(f"{k + 1}. {x}" for k, x in enumerate(fluxo))),
-            ("Fluxos alternativos", "\n".join(alt) if alt else "—"),
-        ], [4, 12])
+        par(d, f"Nome: {nome}", "Nome:")
+        par(d, f"Identificador: #{uid}", "Identificador:")
+        par(d, f"Atores: {atores}", "Atores:")
+        h = next(x for x in C.HISTORIAS if x[0] == us)
+        par(d, f"Descrição: Como {h[1].lower()}, eu quero {h[3]}, para {h[4]}.", "Descrição:")
+        par(d, f"Pré-condições: {pre}", "Pré-condições:")
+        par(d, f"Pós-condições: {pos}", "Pós-condições:")
+        p = d.add_paragraph(); p.add_run("Caso básico de ação:").bold = True
+        lista(d, fluxo, numerada=True)
+        if alt:
+            p = d.add_paragraph(); p.add_run("Fluxos alternativos:").bold = True
+            lista(d, alt)
+        d.add_paragraph()
 
-    secao(d, False)
-    d.add_heading("Solução 2 – Diagrama de Classes", 1)
-    par(d, "Classes do domínio (nomes em português; no banco as tabelas estão em inglês, por exemplo Pedido = orders). "
-           "Valores monetários são inteiros em centavos para evitar erros de arredondamento. ItemPedido e OpcaoDoItem guardam "
-           "uma cópia (snapshot) de nomes e preços no momento da compra.")
-    imagem(d, RAIZ / "diagramas/03-diagrama-de-classes.png", "Figura 2 – Diagrama de classes", 16, 21.5)
+    quebra(d)
+    titulo(d, "Solução – 2 (Diagrama de Classes):")
+    par(d, "Classes do domínio (no banco as tabelas estão em inglês, por exemplo Pedido = orders). Valores monetários são "
+           "inteiros em centavos. ItemPedido e OpcaoDoItem guardam uma cópia de nomes e preços no momento da compra.")
+    imagem(d, RAIZ / "diagramas/03-diagrama-de-classes.png", "Figura 2 – Diagrama de classes", LARG, 19)
 
-    secao(d, True)
     seqs = [("Cadastro", "04-sequencia-cadastro"), ("Login", "05-sequencia-login"), ("Consulta", "06-sequencia-consulta"),
             ("Carrinho", "07-sequencia-carrinho"), ("Venda", "08-sequencia-venda")]
     for k, (nome, arq) in enumerate(seqs):
-        if k:
-            quebra(d)
-        d.add_heading(f"Solução 2 – Diagrama de Sequência de {nome}", 1)
-        imagem(d, RAIZ / f"diagramas/{arq}.png", f"Figura {k + 3} – Sequência de {nome.lower()}", 24.5, 14.2)
+        quebra(d)
+        titulo(d, f"Solução – 2 (Diagrama de Sequência {'de ' if nome in ('Login', 'Consulta', 'Venda') else ''}{nome}):")
+        imagem(d, girado(RAIZ / f"diagramas/{arq}.png"), f"Figura {k + 3} – Sequência de {nome.lower()} (página girada)", LARG, 19.5)
 
-    secao(d, False)
-    d.add_heading("Solução 2 – Projeto Físico do Banco de Dados", 1)
-    par(d, "Banco PostgreSQL (Supabase). Fonte da verdade: migrações SQL versionadas (supabase/migrations do projeto da loja). "
-           "Segurança por Row Level Security em todas as tabelas; regras críticas (criar pedido, transições de status, estoque) em "
-           "funções no banco. A tabela abaixo é o dicionário de dados das tabelas principais, gerado da migração inicial.")
+    quebra(d)
+    titulo(d, "Solução – 2 (Projeto Físico do Banco de Dados):")
+    par(d, "Banco PostgreSQL (Supabase), com Row Level Security em todas as tabelas e regras críticas (criar pedido, transições "
+           "de status, estoque) em funções no banco. Dicionário de dados das tabelas principais, gerado das migrações SQL:")
     dic = json.loads((RAIZ / "ferramentas/tabelas.json").read_text(encoding="utf-8"))
     for nome in ["profiles", "customer_addresses", "consents", "categories", "products", "product_variants", "option_lists",
                  "options", "product_option_groups", "orders", "order_items", "order_item_options", "order_status_history",
                  "payments", "refunds", "coupons", "coupon_redemptions", "campaigns", "banners", "ingredients",
                  "stock_movements", "store_settings", "business_hours", "print_jobs", "audit_log"]:
         if nome in dic:
-            d.add_heading(nome, 3)
-            tabela(d, ["Coluna", "Tipo", "Restrições"], dic[nome], [5, 4, 7], tam=9)
+            p = d.add_paragraph(); p.add_run(f"Tabela {nome}").bold = True
+            tabela(d, ["Coluna", "Tipo", "Restrições"], dic[nome], [4.5, 3.8, 6.7], tam=9)
 
-    # ---------- Solução 3 ----------
     quebra(d)
-    d.add_heading("Solução 3 – Wireframes", 1)
-    par(d, "Wireframes de baixa fidelidade (tons de cinza) das telas principais. Área do cliente desenhada para celular "
-           "(mobile-first) e área da equipe para computador/tablet. Fontes HTML em wireframes/fontes.")
+    titulo(d, "Solução – 3 (Wire frame):")
     wfs = sorted((RAIZ / "wireframes").glob("*.png"))
     for k, f in enumerate(wfs):
-        titulo = f.stem.split("-", 1)[1].replace("-", " ").capitalize()
+        nome = f.stem.split("-", 1)[1].replace("-", " ").capitalize()
         mob = int(f.stem[:2]) <= 10
-        imagem(d, f, f"Wireframe {k + 1} – {titulo}", 8.5 if mob else 16, 19)
+        p = d.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER; p.add_run(f"Tela – {nome}").bold = True
+        imagem(d, f, f"Wireframe {k + 1}", 8 if mob else LARG, 19)
         if k < len(wfs) - 1:
             quebra(d)
 
     quebra(d)
-    d.add_heading("Solução 3 – Mockups (telas oficiais)", 1)
-    par(d, f"Capturas das telas oficiais publicadas em {C.SITE}, com a identidade visual da marca (roxo açaí, verde-limão e "
-           "amarelo). Captura automatizada (ferramentas/capturar_mockups.mjs) sem enviar pedidos.")
+    titulo(d, "Solução – 3 (Mockup):")
+    par(d, f"Telas oficiais publicadas em {C.SITE} (capturas reais do sistema).")
     mks = sorted((RAIZ / "mockups").glob("*.png"))
     for k, f in enumerate(mks):
-        titulo = f.stem.split("-", 1)[1].replace("-", " ").capitalize()
-        larga = "computador" in f.stem or "admin" in f.stem or "painel" in f.stem
-        imagem(d, f, f"Mockup {k + 1} – {titulo}", 16 if larga else 9, 21)
+        nome = f.stem.split("-", 1)[1].replace("-", " ").capitalize()
+        larga = "computador" in f.stem
+        p = d.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER; p.add_run(f"Tela – {nome}").bold = True
+        imagem(d, f, f"Mockup {k + 1}", LARG if larga else 8.5, 19.5)
         if k < len(mks) - 1:
             quebra(d)
 
     quebra(d)
-    d.add_heading("Solução 3 – Mapa Conceitual", 1)
-    imagem(d, RAIZ / "diagramas/09-mapa-conceitual.png", "Figura – Mapa conceitual da plataforma", 16, 21)
-    secao(d, True)
-    d.add_heading("Solução 3 – Mapa Navegacional", 1)
-    imagem(d, RAIZ / "diagramas/10-mapa-navegacional.png", "Figura – Mapa navegacional (rotas reais do sistema)", 24.5, 14.5)
-
-    secao(d, False)
-    d.add_heading("Referências", 1)
-    lista(d, ["MARQUES, A. Projeto Integrador Transdisciplinar em Engenharia de Software II. Universidade Cruzeiro do Sul, 2026.",
-              "FOWLER, M. UML Essencial. 3. ed. Porto Alegre: Bookman, 2005.",
-              "COHN, M. User Stories Applied: For Agile Software Development. Boston: Addison-Wesley, 2004.",
-              "BRASIL. Lei nº 13.709/2018 – Lei Geral de Proteção de Dados Pessoais (LGPD).",
-              "NEXT.JS. Documentation. Disponível em: https://nextjs.org/docs.",
-              "SUPABASE. Documentation. Disponível em: https://supabase.com/docs.",
-              "MERCADO PAGO. Developers – API de Pagamentos. Disponível em: https://www.mercadopago.com.br/developers."])
+    titulo(d, "Solução – 3 (Mapa Conceitual):", 1)
+    imagem(d, RAIZ / "diagramas/09-mapa-conceitual.png", "Mapa conceitual da plataforma", LARG, 19.5)
+    quebra(d)
+    titulo(d, "Solução – 3 (Mapa Navegacional):", 1)
+    imagem(d, girado(RAIZ / "diagramas/10-mapa-navegacional.png"), "Mapa navegacional – rotas reais do sistema (página girada)", LARG, 19.5)
     out = DOCS / "Documentacao-PIT-II-Claudio-Matteo.docx"
     d.save(out)
     return out
@@ -350,59 +316,47 @@ def documentacao():
 # ---------------- Entrega ----------------
 def entrega():
     d = novo_doc()
-    capa(d, "Plataforma Deboa Açaí", "Entrega: dados do estudante, repositório, codificação e testes da solução")
-    par(d, f"Nome: {C.ALUNO}", "Nome:")
-    par(d, f"RGM: {C.RGM}", "RGM:")
-    tabela(d, ["Item", "Informação"], [
-        ("Linguagem do Back-end", "TypeScript (Node.js 22) – Next.js 16 Server Actions e rotas de API; regras críticas em PL/pgSQL"),
+    cabecalho_aluno(d)
+    p = d.add_paragraph(); p.add_run("Documentação:").bold = True
+    p = d.add_paragraph(); p.add_run("Link do repositório:").bold = True
+    par(d, C.REPO)
+    par(d, "Diretório com os documentos:")
+    par(d, f"{C.REPO}/tree/main/docs")
+    par(d, f"Doc PIT 2: {C.REPO}/blob/main/docs/Documentacao-PIT-II-Claudio-Matteo.docx")
+
+    p = d.add_paragraph(); p.add_run("Codificação:").bold = True
+    tabela(d, ["Linguagem do Back-end", "TypeScript (Node.js 22) – Next.js 16 Server Actions e rotas de API; regras críticas em PL/pgSQL"], [
         ("Banco de Dados", "PostgreSQL (Supabase)"),
         ("Hospedagem", "Netlify (aplicação + funções agendadas) e Supabase (banco, autenticação, arquivos)"),
-        ("Plataforma", "Web responsiva e instalável (PWA): celular, tablet e computador"),
-        ("Modo de Codificação", "(X) Tradicional   ( ) Low-code   ( ) No-code"),
-        ("Link do repositório no GitHub", C.REPO),
-        ("Link da solução em funcionamento", C.SITE),
-        ("Link do vídeo narrado (mínimo 5 min)", C.VIDEO),
-    ], [5.5, 10.5])
+        ("Plataforma", "Web (responsivo para smartphone, tablet e computador) e instalável (PWA)"),
+        ("Modo de Codificação", "(X) Tradicional\n( ) Low-code\n( ) No-code"),
+        ("Link do repositório no GitHub com os códigos abertos", C.REPO),
+        ("Link da solução em / funcionamento", C.SITE),
+        ("Link do vídeo narrado (no mínimo 5 min)", C.VIDEO),
+    ], [5.5, 9.5], tam=11)
 
-    d.add_heading("Documentação", 1)
-    par(d, f"Link do repositório: {C.REPO}")
-    par(d, f"Diretório com os documentos: {C.REPO}/tree/main/docs")
-    par(d, "Documentação do PIT II (Soluções 1, 2 e 3): docs/Documentacao-PIT-II-Claudio-Matteo.docx")
-    par(d, "Diagramas (PNG e fontes Mermaid/SVG): diagramas/ · Wireframes: wireframes/ · Mockups: mockups/ · Guia de uso: README.md")
-
-    d.add_heading("Codificação", 1)
-    par(d, "A solução foi codificada no modo tradicional, em TypeScript, com arquitetura em camadas equivalente ao MVC:")
-    tabela(d, ["Papel MVC", "Onde está no código"], C.ARQUITETURA_MVC, [4, 12])
-    d.add_heading("Estrutura de diretórios do projeto da loja", 2)
-    cod = d.add_paragraph()
-    r = cod.add_run("src/\n  app/            páginas (View) e Server Actions (Controller)\n    (loja)/       área do cliente: cardápio, produto, carrinho, checkout, pedido, conta\n"
-                    "    painel/       painel de pedidos e balcão\n    admin/        painel do proprietário\n    actions/      Server Actions (controle)\n"
-                    "    api/          webhook do Mercado Pago e tarefas agendadas\n  components/     componentes de interface\n"
-                    "  domain/         regras de negócio puras + testes (Model)\n  lib/            serviços: Supabase, pagamentos, geocodificação, push, impressão\n"
-                    "supabase/migrations/  esquema do banco, funções e políticas RLS (Model)\ne2e/            testes de ponta a ponta (Playwright)")
-    r.font.name = "Courier New"; r.font.size = Pt(9)
-    cod.paragraph_format.line_spacing = 1.0
-    d.add_heading("Exemplo de regra de negócio (Model) – frete por distância", 2)
+    par(d, "Solução codificada no modo tradicional, em TypeScript, com arquitetura em camadas equivalente ao padrão MVC "
+           "(as orientações sugerem Java/PHP/C#/Python; optou-se por TypeScript por ser a mesma linguagem no front-end e no "
+           "back-end e pelo suporte nativo do Next.js):")
+    tabela(d, ["Papel MVC", "Onde está no código"], C.ARQUITETURA_MVC, [4, 11])
+    par(d, "Exemplo de regra de negócio (Model) – cálculo do frete por faixa de distância:")
     ex = d.add_paragraph()
     r = ex.add_run("export function quoteByDistance(distanceKm: number, tiers = DEFAULT_DELIVERY_TIERS): DeliveryQuote {\n"
                    "  const d = roundToMeters(distanceKm);\n  const tier = tiers.find((t) => d <= t.maxKm);\n"
                    "  if (!tier) return { available: false, distanceKm: d, reason: \"out_of_range\" };\n"
                    "  return { available: true, distanceKm: d, feeCents: tier.feeCents };\n}")
     r.font.name = "Courier New"; r.font.size = Pt(9)
-    ex.paragraph_format.line_spacing = 1.0
-    d.add_heading("Boas práticas aplicadas", 2)
+    par(d, "Boas práticas aplicadas:")
     lista(d, ["Preços, frete e cupons sempre recalculados no servidor/banco (o navegador envia apenas ids e quantidades).",
               "Row Level Security em todas as tabelas e permissões por papel (atendente, gerente, proprietário).",
-              "Idempotência em pedidos, pagamentos e movimentos de estoque (clique duplo não duplica).",
+              "Idempotência em pedidos, pagamentos e movimentos de estoque.",
               "Webhook do Mercado Pago com assinatura HMAC e conciliação agendada a cada 5 minutos.",
-              "Limites de tentativas por origem (pedido, Pix, cartão, cupom) com IP guardado apenas como hash.",
-              "Segredos apenas em variáveis de ambiente (nunca no repositório).",
-              "LGPD: consentimentos versionados, exportação/exclusão de dados e anonimização automática."])
+              "Limites de tentativas por origem, com IP guardado apenas como hash.",
+              "Segredos somente em variáveis de ambiente; LGPD: consentimentos, exportação/exclusão e anonimização."])
 
-    d.add_heading("Testes da Solução", 1)
-    d.add_heading("Testes automatizados", 2)
-    par(d, "Testes de unidade e de integração com Vitest; os testes de banco executam as migrações reais em um PostgreSQL "
-           "em memória (PGlite). Execução em 14/11/2026: 170 testes, 170 aprovados.")
+    p = d.add_paragraph(); r = p.add_run("Testes da Solução"); r.bold = True; r.font.size = Pt(14)
+    par(d, "Testes automatizados (Vitest + PGlite, migrações reais em PostgreSQL em memória): 170 testes, 170 aprovados em "
+           "14/11/2026. Testes de ponta a ponta (Playwright): 10 cenários nos perfis celular e computador.")
     tabela(d, ["Arquivo de teste", "O que verifica", "Testes"], [
         ("database.test.ts", "Migrações, RLS, criação de pedido, transições, estoque, cupons, retenção", 51),
         ("pricing.test.ts", "Preço de itens, adicionais grátis/pagos, limites", 18),
@@ -417,32 +371,28 @@ def entrega():
         ("coupons.test.ts", "Validação e cálculo de cupons", 6),
         ("seo.test.ts / theme.test.ts", "Dados estruturados e contraste das cores", 8),
         ("auth.test.ts", "Permissões por papel", 3),
-    ], [4.5, 9.5, 2])
-    par(d, "Testes de ponta a ponta (Playwright, Chrome, celular e computador): navegação, cardápio, configurador, carrinho, "
-           "checkout até antes do pagamento e teste de carga – 10 cenários, executados nos perfis celular e computador.")
+    ], [4.2, 8.8, 2], tam=9)
 
-    d.add_heading("Laudo de Qualidade – testes com pares", 2)
-    par(d, "Cada colega testa a plataforma em " + C.SITE + " (pode montar o carrinho e ir até o checkout sem pagar) e preenche "
-           "uma tabela. Formulário e roteiro: testes/roteiro-de-testes.md.")
-    for k in range(1, 6):
-        tabela(d, [f"Testador {k} – Nome:", "Data do teste:"], [
-            ("O que testou e funcionou:", ""),
-            ("O que testou e não funcionou – o que deve ser corrigido:", ""),
-            ("Funcionalidade não testada (faltou ou não foi implementada):", ""),
-        ], [8, 8])
+    p = d.add_paragraph(); p.add_run("Laudo de Qualidade").bold = True
+    for nome, data, ok, nok, nt in C.LAUDO:
+        tabela(d, [f"Nome: {nome}", f"Data do teste: {data}"], [
+            ("O que testou e funcionou:", ok),
+            ("O que testou e não funcionou – O que deve ser corrigido:", nok),
+            ("Funcionalidade não testada (faltou ou não foi implementada):", nt),
+        ], [5.5, 9.5])
 
-    d.add_heading("Problemas identificados e correções", 2)
-    par(d, "Problemas encontrados na operação real (primeiros dias de vendas) e já corrigidos na versão publicada:")
-    tabela(d, ["Problema identificado", "Correção aplicada"], C.PROBLEMAS_CORRIGIDOS, [8, 8])
-    d.add_heading("Recomendações", 2)
-    lista(d, ["Completar o laudo com os 5 testadores e corrigir o que for apontado.",
-              "Exercitar em produção o pagamento com cartão e o estorno real.",
-              "Validar notificações e som no aparelho da loja e a impressora Bluetooth.",
-              "Agendar backup semanal do banco e migrar para planos pagos quando a demanda crescer."])
-    d.add_heading("Evidências", 2)
-    par(d, "Link das evidências (imagens e vídeos): (inserir link)")
-    d.add_heading("Vídeo da Solução atualizada", 2)
-    tabela(d, ["Item", "Link"], [("Link para o vídeo", C.VIDEO)], [5, 11])
+    p = d.add_paragraph(); p.add_run("Evidências:").bold = True
+    par(d, "Link das evidências com imagens e vídeos: (inserir link)")
+    p = d.add_paragraph(); p.add_run("Problemas identificados:").bold = True
+    for prob, _ in C.PROBLEMAS_CORRIGIDOS:
+        par(d, prob)
+    p = d.add_paragraph(); p.add_run("Recomendações:").bold = True
+    par(d, "Com base nos problemas identificados, foram aplicadas (e já publicadas) as seguintes ações corretivas:")
+    lista(d, [c for _, c in C.PROBLEMAS_CORRIGIDOS])
+    par(d, "Próximos passos: exercitar em produção o pagamento com cartão e o estorno real, validar notificações e impressora "
+           "no aparelho da loja e agendar backup semanal do banco.")
+    p = d.add_paragraph(); p.add_run("Vídeo da Solução atualizada").bold = True
+    tabela(d, ["Link para o vídeo", C.VIDEO], [], [5, 10])
     out = DOCS / "Entrega-PIT-II-Claudio-Matteo.docx"
     d.save(out)
     return out

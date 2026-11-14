@@ -1,134 +1,134 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1560" height="1560" viewBox="0 0 1560 1560" font-family="Rubik, Arial, sans-serif">
 <defs>
-    <marker id="seta" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#3a0244" stroke-width="1.5"/></marker>
-    <marker id="heranca" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="14" markerHeight="14" orient="auto-start-reverse"><path d="M0,0 L12,6 L0,12 Z" fill="#fff" stroke="#3a0244" stroke-width="1.5"/></marker>
+    <marker id="seta" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#000000" stroke-width="1.5"/></marker>
+    <marker id="heranca" viewBox="0 0 12 12" refX="12" refY="6" markerWidth="14" markerHeight="14" orient="auto-start-reverse"><path d="M0,0 L12,6 L0,12 Z" fill="#fff" stroke="#000000" stroke-width="1.5"/></marker>
   </defs>
   <style>
-    .uc { font-size: 17px; fill: #24012b; }
-    .id { font-size: 12px; fill: #8e24d6; font-weight: 700; }
-    .ator { font-size: 19px; font-weight: 700; fill: #3a0244; }
-    .rot { font-size: 13px; fill: #8e24d6; font-style: italic; }
+    .uc { font-size: 17px; fill: #000000; }
+    .id { font-size: 12px; fill: #000000; font-weight: 700; }
+    .ator { font-size: 19px; font-weight: 700; fill: #000000; }
+    .rot { font-size: 13px; fill: #000000; font-style: italic; }
   </style>
 <rect width="1560" height="1560" fill="#fff"/>
-<text x="780.0" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="#3a0244">Diagrama de Caso de Uso Geral — Plataforma Deboa Açaí</text>
-<rect x="320" y="90" width="900" height="1264" rx="24" fill="#fffaf0" stroke="#3a0244" stroke-width="3"/>
-<text x="350" y="122" font-size="20" font-weight="700" fill="#3a0244">Sistema: deboaacai.com.br</text>
-<line x1="120" y1="350" x2="465.6" y2="218.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="350" x2="415.6" y2="302.1" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="350" x2="386.2" y2="365.2" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="350" x2="446.2" y2="440.1" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="350" x2="480.1" y2="528.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="350" x2="496.9" y2="619.2" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="940" x2="477.5" y2="771.5" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="940" x2="491.2" y2="1171.5" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="940" x2="440.6" y2="859.1" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="940" x2="382.2" y2="931.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="940" x2="422.8" y2="996.2" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="940" x2="469.1" y2="1081.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="320" x2="1055.0" y2="215.7" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="320" x2="1108.8" y2="293.8" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="320" x2="1099.5" y2="358.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="320" x2="1047.9" y2="439.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="320" x2="1019.9" y2="528.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="720" x2="1089.3" y2="668.9" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="720" x2="1116.0" y2="734.9" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="1120" x2="1010.9" y2="864.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="1120" x2="1031.0" y2="954.7" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="1120" x2="1069.7" y2="1041.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="1120" x2="1119.1" y2="1113.3" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="1120" x2="1081.7" y2="1181.2" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="1370" x2="468.4" y2="1230.6" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="1370" x2="421.4" y2="1315.5" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="1440" y1="1430" x2="1052.3" y2="1320.1" stroke="#3a0244" stroke-width="1.6" opacity="0.75"/>
-<line x1="120" y1="880" x2="120" y2="432" stroke="#3a0244" stroke-width="2" marker-end="url(#heranca)"/>
-<line x1="1440" y1="660" x2="1440" y2="402" stroke="#3a0244" stroke-width="2" marker-end="url(#heranca)"/>
-<line x1="1440" y1="1060" x2="1440" y2="802" stroke="#3a0244" stroke-width="2" marker-end="url(#heranca)"/>
-<ellipse cx="540" cy="190" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<text x="780.0" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="#000000">Diagrama de Caso de Uso Geral — Plataforma Deboa Açaí</text>
+<rect x="320" y="90" width="900" height="1264" rx="24" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+<text x="350" y="122" font-size="20" font-weight="700" fill="#000000">Sistema: deboaacai.com.br</text>
+<line x1="120" y1="350" x2="465.6" y2="218.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="350" x2="415.6" y2="302.1" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="350" x2="386.2" y2="365.2" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="350" x2="446.2" y2="440.1" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="350" x2="480.1" y2="528.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="350" x2="496.9" y2="619.2" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="940" x2="477.5" y2="771.5" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="940" x2="491.2" y2="1171.5" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="940" x2="440.6" y2="859.1" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="940" x2="382.2" y2="931.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="940" x2="422.8" y2="996.2" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="940" x2="469.1" y2="1081.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="320" x2="1055.0" y2="215.7" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="320" x2="1108.8" y2="293.8" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="320" x2="1099.5" y2="358.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="320" x2="1047.9" y2="439.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="320" x2="1019.9" y2="528.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="720" x2="1089.3" y2="668.9" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="720" x2="1116.0" y2="734.9" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="1120" x2="1010.9" y2="864.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="1120" x2="1031.0" y2="954.7" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="1120" x2="1069.7" y2="1041.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="1120" x2="1119.1" y2="1113.3" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="1120" x2="1081.7" y2="1181.2" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="1370" x2="468.4" y2="1230.6" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="1370" x2="421.4" y2="1315.5" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="1440" y1="1430" x2="1052.3" y2="1320.1" stroke="#000000" stroke-width="1.6" opacity="0.75"/>
+<line x1="120" y1="880" x2="120" y2="432" stroke="#000000" stroke-width="2" marker-end="url(#heranca)"/>
+<line x1="1440" y1="660" x2="1440" y2="402" stroke="#000000" stroke-width="2" marker-end="url(#heranca)"/>
+<line x1="1440" y1="1060" x2="1440" y2="802" stroke="#000000" stroke-width="2" marker-end="url(#heranca)"/>
+<ellipse cx="540" cy="190" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="184" text-anchor="middle" class="id">UC01</text>
 <text x="540" y="205" text-anchor="middle" class="uc">Consultar cardápio</text>
-<ellipse cx="540" cy="282" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="282" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="276" text-anchor="middle" class="id">UC02</text>
 <text x="540" y="297" text-anchor="middle" class="uc">Personalizar produto</text>
-<ellipse cx="540" cy="374" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="374" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="368" text-anchor="middle" class="id">UC03</text>
 <text x="540" y="389" text-anchor="middle" class="uc">Gerenciar carrinho</text>
-<ellipse cx="540" cy="466" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="466" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="460" text-anchor="middle" class="id">UC04</text>
 <text x="540" y="481" text-anchor="middle" class="uc">Aplicar cupom</text>
-<ellipse cx="540" cy="558" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="558" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="552" text-anchor="middle" class="id">UC05</text>
 <text x="540" y="573" text-anchor="middle" class="uc">Criar conta</text>
-<ellipse cx="540" cy="650" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="650" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="644" text-anchor="middle" class="id">UC06</text>
 <text x="540" y="665" text-anchor="middle" class="uc">Fazer login</text>
-<ellipse cx="540" cy="742" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="742" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="736" text-anchor="middle" class="id">UC07</text>
 <text x="540" y="757" text-anchor="middle" class="uc">Finalizar pedido (checkout)</text>
-<ellipse cx="540" cy="834" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="834" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="828" text-anchor="middle" class="id">UC09</text>
 <text x="540" y="849" text-anchor="middle" class="uc">Acompanhar pedido</text>
-<ellipse cx="540" cy="926" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="926" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="920" text-anchor="middle" class="id">UC10</text>
 <text x="540" y="941" text-anchor="middle" class="uc">Consultar histórico / repetir</text>
-<ellipse cx="540" cy="1018" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="1018" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="1012" text-anchor="middle" class="id">UC11</text>
 <text x="540" y="1033" text-anchor="middle" class="uc">Cancelar pedido</text>
-<ellipse cx="540" cy="1110" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="1110" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="1104" text-anchor="middle" class="id">UC12</text>
 <text x="540" y="1125" text-anchor="middle" class="uc">Gerenciar perfil e privacidade</text>
-<ellipse cx="540" cy="1202" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="1202" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="1196" text-anchor="middle" class="id">UC08</text>
 <text x="540" y="1217" text-anchor="middle" class="uc">Pagar com Pix ou cartão</text>
-<ellipse cx="540" cy="1294" rx="160" ry="32" fill="#f3e3fe" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="540" cy="1294" rx="160" ry="32" fill="#e6e6e6" stroke="#000000" stroke-width="2.2"/>
 <text x="540" y="1288" text-anchor="middle" class="id">UC25</text>
 <text x="540" y="1309" text-anchor="middle" class="uc">Confirmar pagamento (webhook)</text>
-<ellipse cx="960" cy="190" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="190" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="184" text-anchor="middle" class="id">UC13</text>
 <text x="960" y="205" text-anchor="middle" class="uc">Gerenciar fila de pedidos</text>
-<ellipse cx="960" cy="282" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="282" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="276" text-anchor="middle" class="id">UC14</text>
 <text x="960" y="297" text-anchor="middle" class="uc">Registrar pedido de balcão</text>
-<ellipse cx="960" cy="374" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="374" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="368" text-anchor="middle" class="id">UC15</text>
 <text x="960" y="389" text-anchor="middle" class="uc">Imprimir comanda</text>
-<ellipse cx="960" cy="466" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="466" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="460" text-anchor="middle" class="id">UC16</text>
 <text x="960" y="481" text-anchor="middle" class="uc">Marcar item esgotado</text>
-<ellipse cx="960" cy="558" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="558" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="552" text-anchor="middle" class="id">UC17</text>
 <text x="960" y="573" text-anchor="middle" class="uc">Movimentar estoque</text>
-<ellipse cx="960" cy="650" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="650" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="644" text-anchor="middle" class="id">UC18</text>
 <text x="960" y="665" text-anchor="middle" class="uc">Abrir / fechar loja</text>
-<ellipse cx="960" cy="742" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="742" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="736" text-anchor="middle" class="id">UC19</text>
 <text x="960" y="757" text-anchor="middle" class="uc">Cancelar e estornar pedido</text>
-<ellipse cx="960" cy="834" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="834" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="828" text-anchor="middle" class="id">UC20</text>
 <text x="960" y="849" text-anchor="middle" class="uc">Gerenciar cardápio e preços</text>
-<ellipse cx="960" cy="926" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="926" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="920" text-anchor="middle" class="id">UC21</text>
 <text x="960" y="941" text-anchor="middle" class="uc">Gerenciar marketing e cupons</text>
-<ellipse cx="960" cy="1018" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="1018" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="1012" text-anchor="middle" class="id">UC22</text>
 <text x="960" y="1033" text-anchor="middle" class="uc">Consultar financeiro</text>
-<ellipse cx="960" cy="1110" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="1110" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="1104" text-anchor="middle" class="id">UC23</text>
 <text x="960" y="1125" text-anchor="middle" class="uc">Gerenciar equipe e papéis</text>
-<ellipse cx="960" cy="1202" rx="160" ry="32" fill="#fff" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="1202" rx="160" ry="32" fill="#fff" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="1196" text-anchor="middle" class="id">UC24</text>
 <text x="960" y="1217" text-anchor="middle" class="uc">Configurar loja e aparência</text>
-<ellipse cx="960" cy="1294" rx="160" ry="32" fill="#f3e3fe" stroke="#3a0244" stroke-width="2.2"/>
+<ellipse cx="960" cy="1294" rx="160" ry="32" fill="#e6e6e6" stroke="#000000" stroke-width="2.2"/>
 <text x="960" y="1288" text-anchor="middle" class="id">UC26</text>
 <text x="960" y="1309" text-anchor="middle" class="uc">Expirar e conciliar pagamentos</text>
-<path d="M580.0,774.0 C815.2,742 815.2,1202 580.0,1170.0" fill="none" stroke="#b140f6" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#seta)"/>
+<path d="M580.0,774.0 C815.2,742 815.2,1202 580.0,1170.0" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#seta)"/>
 <text x="730" y="977.0" class="rot">«include»</text>
-<path d="M580.0,434.0 C771.04,466 771.04,374 580.0,406.0" fill="none" stroke="#b140f6" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#seta)"/>
+<path d="M580.0,434.0 C771.04,466 771.04,374 580.0,406.0" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#seta)"/>
 <text x="730" y="425.0" class="rot">«extend»</text>
-<path d="M1000.0,222.0 C1202.08,190 1202.08,374 1000.0,342.0" fill="none" stroke="#b140f6" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#seta)"/>
+<path d="M1000.0,222.0 C1202.08,190 1202.08,374 1000.0,342.0" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#seta)"/>
 <text x="1150" y="287.0" class="rot">«include»</text>
 
-  <g stroke="#3a0244" stroke-width="3" fill="none">
+  <g stroke="#000000" stroke-width="3" fill="none">
     <circle cx="120" cy="312" r="16" fill="#fff"/>
     <line x1="120" y1="328" x2="120" y2="368"/>
     <line x1="96" y1="342" x2="144" y2="342"/>
@@ -137,7 +137,7 @@
   </g>
   <text x="120" y="422" text-anchor="middle" class="ator">Visitante</text>
 
-  <g stroke="#3a0244" stroke-width="3" fill="none">
+  <g stroke="#000000" stroke-width="3" fill="none">
     <circle cx="120" cy="902" r="16" fill="#fff"/>
     <line x1="120" y1="918" x2="120" y2="958"/>
     <line x1="96" y1="932" x2="144" y2="932"/>
@@ -146,7 +146,7 @@
   </g>
   <text x="120" y="1012" text-anchor="middle" class="ator">Cliente</text>
 
-  <g stroke="#3a0244" stroke-width="3" fill="none">
+  <g stroke="#000000" stroke-width="3" fill="none">
     <circle cx="120" cy="1332" r="16" fill="#fff"/>
     <line x1="120" y1="1348" x2="120" y2="1388"/>
     <line x1="96" y1="1362" x2="144" y2="1362"/>
@@ -155,7 +155,7 @@
   </g>
   <text x="120" y="1442" text-anchor="middle" class="ator">Mercado Pago</text>
 
-  <g stroke="#3a0244" stroke-width="3" fill="none">
+  <g stroke="#000000" stroke-width="3" fill="none">
     <circle cx="1440" cy="282" r="16" fill="#fff"/>
     <line x1="1440" y1="298" x2="1440" y2="338"/>
     <line x1="1416" y1="312" x2="1464" y2="312"/>
@@ -164,7 +164,7 @@
   </g>
   <text x="1440" y="392" text-anchor="middle" class="ator">Atendente</text>
 
-  <g stroke="#3a0244" stroke-width="3" fill="none">
+  <g stroke="#000000" stroke-width="3" fill="none">
     <circle cx="1440" cy="682" r="16" fill="#fff"/>
     <line x1="1440" y1="698" x2="1440" y2="738"/>
     <line x1="1416" y1="712" x2="1464" y2="712"/>
@@ -173,7 +173,7 @@
   </g>
   <text x="1440" y="792" text-anchor="middle" class="ator">Gerente</text>
 
-  <g stroke="#3a0244" stroke-width="3" fill="none">
+  <g stroke="#000000" stroke-width="3" fill="none">
     <circle cx="1440" cy="1082" r="16" fill="#fff"/>
     <line x1="1440" y1="1098" x2="1440" y2="1138"/>
     <line x1="1416" y1="1112" x2="1464" y2="1112"/>
@@ -182,7 +182,7 @@
   </g>
   <text x="1440" y="1192" text-anchor="middle" class="ator">Proprietário</text>
 
-  <g stroke="#3a0244" stroke-width="3" fill="none">
+  <g stroke="#000000" stroke-width="3" fill="none">
     <circle cx="1440" cy="1392" r="16" fill="#fff"/>
     <line x1="1440" y1="1408" x2="1440" y2="1448"/>
     <line x1="1416" y1="1422" x2="1464" y2="1422"/>
@@ -190,5 +190,5 @@
     <line x1="1440" y1="1448" x2="1460" y2="1478"/>
   </g>
   <text x="1440" y="1502" text-anchor="middle" class="ator">Agendador</text>
-<text x="40" y="1536" font-size="14" fill="#3a0244">Casos em lilás são disparados por atores externos: Mercado Pago (gateway de pagamento) e Agendador (funções agendadas Netlify / pg_cron). Setas de ponta branca = generalização. O estorno (UC19) também é enviado ao Mercado Pago.</text>
+<text x="40" y="1536" font-size="14" fill="#000000">Casos em cinza são disparados por atores externos: Mercado Pago (gateway de pagamento) e Agendador (funções agendadas Netlify / pg_cron). Setas de ponta branca = generalização. O estorno (UC19) também é enviado ao Mercado Pago.</text>
 </svg>
