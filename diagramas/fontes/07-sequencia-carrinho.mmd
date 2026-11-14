@@ -1,0 +1,27 @@
+sequenceDiagram
+  autonumber
+  actor C as Cliente
+  participant PR as Tela /produto/[slug]
+  participant CC as cart-core.ts (regras do carrinho)
+  participant LS as localStorage
+  participant CA as Tela /carrinho
+  participant Q as quoteCartAction (servidor)
+  participant DB as Supabase
+  C->>PR: Escolhe tamanho, acompanhamentos, cobertura e observação
+  PR->>PR: Valida mínimos/máximos de cada grupo
+  C->>PR: "Adicionar ao carrinho"
+  PR->>CC: addItem(item)
+  CC->>LS: Salva o carrinho
+  PR-->>C: Redireciona para /carrinho ("Deseja adicionar mais alguma coisa?")
+  CA->>Q: Itens + cupom
+  Q->>DB: Preços atuais, disponibilidade e cupom
+  DB-->>Q: Dados vigentes
+  Q-->>CA: Subtotal, desconto, itens indisponíveis
+  alt Cupom inexistente ou inválido
+    CA->>CC: Remove o cupom automaticamente
+    CA-->>C: Aviso "Cupom removido"
+  end
+  C->>CA: Altera quantidade ou remove item
+  CA->>CC: updateQuantity / removeItem
+  CC->>LS: Salva
+  CA-->>C: Totais atualizados

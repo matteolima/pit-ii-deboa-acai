@@ -1,0 +1,41 @@
+flowchart LR
+  subgraph LOJA[Área do cliente]
+    H[Início /] --> M[Cardápio /cardapio]
+    H --> P
+    M --> P[Produto /produto/slug]
+    P -->|Adicionar| CA[Carrinho /carrinho]
+    CA -->|Continuar comprando| M
+    CA --> CK[Checkout /checkout]
+    CK -->|não logado| E[Entrar /entrar]
+    E --> CD[Cadastro /cadastro]
+    E --> RS[Recuperar senha]
+    E --> CK
+    CK --> PG[Pagamento Pix / cartão]
+    PG --> AC[Acompanhar /pedido/token]
+    AC --> WA[WhatsApp da loja]
+    H --> CT[Minha conta /conta]
+    CT --> HP[Meus pedidos /conta/pedidos]
+    HP --> AC
+    HP -->|Repetir pedido| CA
+    CT --> EN[Endereços]
+    CT --> PV[Privacidade LGPD]
+    H --> LG[Privacidade · Termos · Cancelamento]
+  end
+  subgraph EQUIPE[Área da equipe]
+    PA[Painel de pedidos /painel] --> BA[Pedido de balcão /painel/balcao]
+    PA --> CO[Comanda / impressão]
+    AD[Admin /admin] --> AC1[Cardápio]
+    AD --> AC2[Acompanhamentos e adicionais]
+    AD --> PA
+    AD --> AC3[Estoque]
+    AD --> AC4[Financeiro]
+    AD --> AC5[Marketing]
+    AD --> AC6[Clientes]
+    AD --> AC7[Loja e horários]
+    AD --> AC8[Aparência]
+    AD --> AC9[Equipe]
+    AD --> AC10[Auditoria]
+    AD --> AC11[Ajuda / FAQ]
+  end
+  E -->|papel da equipe| AD
+  CT -->|botão Painel| AD

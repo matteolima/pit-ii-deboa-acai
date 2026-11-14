@@ -1,0 +1,30 @@
+sequenceDiagram
+  autonumber
+  actor C as Cliente
+  participant T as Tela /entrar
+  participant G as Google Identity Services
+  participant SB as Supabase Auth (navegador)
+  participant A as signInAction (Server Action)
+  participant P as proxy.ts (sessão)
+  alt Entrar com Google
+    C->>T: Clica "Continuar com o Google"
+    T->>G: Solicita credencial (nonce)
+    G-->>C: Tela de consentimento (deboaacai.com.br)
+    C->>G: Escolhe a conta
+    G-->>T: ID token
+    T->>SB: signInWithIdToken(token, nonce)
+    SB-->>T: Sessão (cookies)
+  else Entrar com e-mail e senha
+    C->>T: Informa e-mail e senha
+    T->>A: Envia formulário
+    A->>SB: signInWithPassword()
+    alt Credenciais inválidas
+      SB-->>A: Erro
+      A-->>T: "E-mail ou senha incorretos"
+    else Válidas
+      SB-->>A: Sessão (cookies)
+    end
+  end
+  T->>P: Redireciona para a página de origem (ou início)
+  P->>SB: Renova/valida a sessão
+  P-->>C: Página da loja com o menu "Minha conta" (e "Painel" se for da equipe)

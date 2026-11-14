@@ -1,0 +1,211 @@
+classDiagram
+  direction LR
+  class Perfil {
+    +uuid id
+    +string nomeCompleto
+    +string telefone
+    +string email
+    +Papel papel
+    +bool ativo
+    +pode(permissao) bool
+  }
+  class Papel {
+    <<enumeration>>
+    CLIENTE
+    ATENDENTE
+    GERENTE
+    PROPRIETARIO
+  }
+  class Endereco {
+    +string rua
+    +string numero
+    +string bairro
+    +string complemento
+    +double latitude
+    +double longitude
+  }
+  class Consentimento {
+    +string finalidade
+    +bool concedido
+    +string versaoPolitica
+    +datetime criadoEm
+  }
+  class Categoria {
+    +string slug
+    +string nome
+    +int ordem
+  }
+  class Produto {
+    +string slug
+    +string nome
+    +string descricao
+    +string imagem
+    +bool disponivel
+    +marcarEsgotado()
+  }
+  class Variante {
+    +string nome
+    +int precoCentavos
+    +bool disponivel
+  }
+  class GrupoDeOpcoes {
+    +string nome
+    +int minimo
+    +int maximo
+    +int quantidadeGratis
+    +int precoExtraCentavos
+    +validarEscolhas(opcoes) bool
+  }
+  class Opcao {
+    +string nome
+    +int precoCentavos
+    +bool exigeObservacao
+  }
+  class Carrinho {
+    +ItemCarrinho[] itens
+    +string cupom
+    +adicionar(item)
+    +remover(idItem)
+    +alterarQuantidade(idItem, qtd)
+    +subtotal() int
+  }
+  class ItemCarrinho {
+    +string produto
+    +string variante
+    +Opcao[] opcoes
+    +int quantidade
+    +string observacao
+  }
+  class Pedido {
+    +string codigo
+    +string tokenPublico
+    +StatusPedido status
+    +string tipoEntrega
+    +string canal
+    +int subtotalCentavos
+    +int descontoCentavos
+    +int freteCentavos
+    +int totalCentavos
+    +transicionar(novoStatus, ator)
+    +cancelar(motivo)
+  }
+  class StatusPedido {
+    <<enumeration>>
+    AGUARDANDO_PAGAMENTO
+    AGUARDANDO_CONFIRMACAO
+    ACEITO
+    EM_PREPARO
+    PRONTO
+    SAIU_PARA_ENTREGA
+    ENTREGUE
+    CANCELADO
+    RECUSADO
+  }
+  class ItemPedido {
+    +string nomeProduto
+    +string nomeVariante
+    +int quantidade
+    +int precoUnitarioCentavos
+    +int totalCentavos
+  }
+  class OpcaoDoItem {
+    +string grupo
+    +string opcao
+    +int quantidade
+    +int cobradoCentavos
+  }
+  class HistoricoStatus {
+    +StatusPedido de
+    +StatusPedido para
+    +string ator
+    +datetime em
+  }
+  class Pagamento {
+    +string metodo
+    +string status
+    +string idMercadoPago
+    +int valorCentavos
+    +datetime expiraEm
+    +sincronizar()
+  }
+  class Estorno {
+    +int valorCentavos
+    +string motivo
+    +string status
+  }
+  class Cupom {
+    +string codigo
+    +string tipo
+    +int valor
+    +int subtotalMinimo
+    +bool primeiroPedido
+    +calcularDesconto(subtotal) int
+  }
+  class Campanha {
+    +string nome
+    +datetime inicio
+    +datetime fim
+  }
+  class Banner {
+    +string titulo
+    +string imagem
+    +string link
+  }
+  class Ingrediente {
+    +string nome
+    +string unidade
+    +decimal emEstoque
+    +decimal reservado
+    +decimal minimo
+  }
+  class MovimentoEstoque {
+    +string tipo
+    +decimal quantidade
+    +string observacao
+  }
+  class ConfiguracaoLoja {
+    +string nome
+    +string whatsapp
+    +json faixasDeFrete
+    +int pedidoMinimoCentavos
+    +int tempoPreparoMin
+    +estaAberta(agora) bool
+    +calcularFrete(distanciaKm) int
+  }
+  class HorarioFuncionamento {
+    +int diaSemana
+    +time abre
+    +time fecha
+  }
+  class Comanda {
+    +string motivo
+    +string status
+    +int tentativas
+    +imprimir()
+  }
+
+  Perfil "1" --> "*" Endereco : possui
+  Perfil "1" --> "*" Consentimento : registra
+  Perfil --> Papel
+  Perfil "1" --> "*" Pedido : faz
+  Categoria "1" o-- "*" Produto : agrupa
+  Produto "1" *-- "1..*" Variante : tamanhos
+  Produto "1" *-- "*" GrupoDeOpcoes : regras
+  GrupoDeOpcoes "*" --> "*" Opcao : oferece
+  Carrinho "1" *-- "*" ItemCarrinho
+  ItemCarrinho --> Variante
+  Carrinho ..> Pedido : gera
+  Pedido "1" *-- "1..*" ItemPedido : contém
+  ItemPedido "1" *-- "*" OpcaoDoItem : personaliza
+  Pedido --> StatusPedido
+  Pedido "1" *-- "*" HistoricoStatus : histórico
+  Pedido "1" --> "*" Pagamento : cobra
+  Pagamento "1" --> "*" Estorno : estorna
+  Pedido "*" --> "0..1" Cupom : usa
+  Campanha "1" o-- "*" Cupom
+  Campanha "1" o-- "*" Banner
+  Variante "*" --> "*" Ingrediente : ficha técnica
+  Opcao "*" --> "*" Ingrediente : ficha técnica
+  Ingrediente "1" --> "*" MovimentoEstoque : movimenta
+  Pedido "1" --> "*" Comanda : imprime
+  ConfiguracaoLoja "1" *-- "*" HorarioFuncionamento

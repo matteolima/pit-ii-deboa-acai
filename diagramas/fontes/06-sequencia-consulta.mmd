@@ -1,0 +1,23 @@
+sequenceDiagram
+  autonumber
+  actor C as Cliente
+  participant M as Tela /cardapio
+  participant L as lib/menu.ts (Server Component)
+  participant DB as Supabase (RLS: leitura pública)
+  participant AC as Tela /pedido/[token]
+  C->>M: Abre o cardápio
+  M->>L: getMenu()
+  L->>DB: SELECT categorias, produtos, variantes, opções (ativos)
+  DB-->>L: Linhas
+  L-->>M: Cardápio montado (preços em centavos)
+  M-->>C: Abas por categoria, preços e itens esgotados
+  Note over C,AC: Consulta do pedido (acompanhamento)
+  C->>AC: Abre o link do pedido (token aleatório)
+  AC->>DB: rpc get_order_tracking(token)
+  DB-->>AC: Pedido, itens, status e histórico
+  AC-->>C: Linha do tempo do status
+  loop A cada 10 segundos
+    AC->>DB: Recarrega o status
+    DB-->>AC: Novo status (ex.: "Saiu para entrega")
+  end
+  AC-->>C: Atualiza a linha do tempo (e notificação push, se autorizada)

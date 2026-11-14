@@ -1,0 +1,24 @@
+sequenceDiagram
+  autonumber
+  actor V as Visitante
+  participant T as Tela /cadastro (React)
+  participant A as signUpAction (Server Action)
+  participant Z as Validação (Zod)
+  participant S as Supabase Auth
+  participant DB as PostgreSQL (trigger)
+  V->>T: Informa nome, e-mail, telefone, senha e aceita os termos
+  T->>A: Envia formulário
+  A->>Z: Valida campos
+  alt Dados inválidos
+    Z-->>A: Erros por campo
+    A-->>T: Mensagens de erro
+    T-->>V: Mostra o que corrigir
+  else Dados válidos
+    A->>S: auth.signUp(email, senha, metadados)
+    S->>DB: Insere auth.users
+    DB->>DB: Trigger cria profiles (papel = cliente) e registra consentimentos
+    S-->>A: Usuário criado (e-mail de confirmação enviado)
+    A-->>T: Sucesso
+    T-->>V: "Confirme seu e-mail para entrar"
+  end
+  Note over V,S: Alternativa: "Continuar com o Google" cria a conta no 1º login (sequência de login)

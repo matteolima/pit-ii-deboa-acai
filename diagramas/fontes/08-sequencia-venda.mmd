@@ -1,0 +1,31 @@
+sequenceDiagram
+  autonumber
+  actor C as Cliente
+  participant CK as Tela /checkout
+  participant A as placeOrderAction
+  participant DB as PostgreSQL (create_order)
+  participant P as lib/payments.ts
+  participant MP as Mercado Pago
+  participant W as /api/webhooks/mercadopago
+  participant PN as Painel /painel (equipe)
+  C->>CK: Entrega/retirada, endereço, contato, forma de pagamento
+  CK->>A: Dados do pedido + carrinho
+  A->>A: Limite de tentativas + validação (Zod)
+  A->>DB: create_order(...) [recalcula preços, frete e cupom]
+  DB-->>A: Pedido DBA-000123 (aguardando pagamento)
+  A->>P: startPix(pedido)
+  P->>MP: POST /v1/payments (Pix, 30 min, idempotência)
+  MP-->>P: QR Code + copia e cola
+  P-->>CK: Tela de pagamento
+  CK-->>C: QR Code, botão copiar e contagem regressiva
+  C->>MP: Paga no app do banco
+  MP->>W: Notificação (assinatura x-signature)
+  W->>W: Valida HMAC e deduplica o evento
+  W->>P: syncMpPayment(id)
+  P->>MP: GET /v1/payments/{id}
+  MP-->>P: approved
+  P->>DB: Pagamento aprovado → order_transition(aguardando confirmação) + reserva estoque
+  DB-->>PN: Realtime: novo pedido (alerta sonoro + push)
+  PN->>DB: Aceitar → Em preparo → Pronto → Saiu para entrega → Entregue
+  DB-->>C: Acompanhamento atualizado (consulta a cada 10 s + push)
+  Note over P,MP: Conciliação a cada 5 min (função agendada) cobre webhooks perdidos

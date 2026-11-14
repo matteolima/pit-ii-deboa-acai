@@ -1,0 +1,1483 @@
+{
+ "profiles": [
+  [
+   "id",
+   "uuid",
+   "PK FK→auth NOT NULL"
+  ],
+  [
+   "full_name",
+   "text",
+   ""
+  ],
+  [
+   "phone",
+   "text",
+   ""
+  ],
+  [
+   "role",
+   "app_role",
+   "NOT NULL DEFAULT 'customer'"
+  ],
+  [
+   "active",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ],
+  [
+   "updated_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "role_permissions": [
+  [
+   "role",
+   "app_role",
+   "NOT NULL"
+  ],
+  [
+   "permission",
+   "text",
+   "NOT NULL"
+  ]
+ ],
+ "store_settings": [
+  [
+   "id",
+   "smallint",
+   "PK NOT NULL DEFAULT 1"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "whatsapp",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "street",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "number",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "district",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "city",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "state",
+   "char(2)",
+   "NOT NULL"
+  ],
+  [
+   "postal_code",
+   "text",
+   ""
+  ],
+  [
+   "latitude",
+   "double precision",
+   ""
+  ],
+  [
+   "longitude",
+   "double precision",
+   ""
+  ],
+  [
+   "time_zone",
+   "text",
+   "NOT NULL DEFAULT 'America/Fortaleza'"
+  ],
+  [
+   "delivery_tiers",
+   "jsonb",
+   "NOT NULL"
+  ],
+  [
+   "min_order_cents",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "prep_time_minutes",
+   "integer",
+   ""
+  ],
+  [
+   "override_mode",
+   "text",
+   "NOT NULL DEFAULT 'auto'"
+  ],
+  [
+   "override_until",
+   "timestamptz",
+   ""
+  ],
+  [
+   "override_reason",
+   "text",
+   ""
+  ],
+  [
+   "auto_print_on_accept",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ],
+  [
+   "delivery_enabled",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ],
+  [
+   "pickup_enabled",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ],
+  [
+   "updated_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "business_hours": [
+  [
+   "id",
+   "bigint",
+   "PK NOT NULL"
+  ],
+  [
+   "weekday",
+   "smallint",
+   "NOT NULL"
+  ],
+  [
+   "open_time",
+   "time",
+   "NOT NULL"
+  ],
+  [
+   "close_time",
+   "time",
+   "NOT NULL"
+  ]
+ ],
+ "special_days": [
+  [
+   "date",
+   "date",
+   "PK NOT NULL"
+  ],
+  [
+   "label",
+   "text",
+   ""
+  ],
+  [
+   "intervals",
+   "jsonb",
+   "NOT NULL DEFAULT '[]'"
+  ]
+ ],
+ "categories": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "slug",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "sort",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "active",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ]
+ ],
+ "products": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "slug",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "category_id",
+   "uuid",
+   "FK→categories NOT NULL"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "description",
+   "text",
+   ""
+  ],
+  [
+   "image_path",
+   "text",
+   ""
+  ],
+  [
+   "sort",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "active",
+   "boolean",
+   "NOT NULL"
+  ],
+  [
+   "available",
+   "boolean",
+   "NOT NULL"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ],
+  [
+   "updated_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "product_variants": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "slug",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "product_id",
+   "uuid",
+   "FK→products NOT NULL"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "price_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "sort",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "available",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ]
+ ],
+ "option_lists": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "slug",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ]
+ ],
+ "options": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "slug",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "list_id",
+   "uuid",
+   "FK→option_lists NOT NULL"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "price_cents",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "sort",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "available",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ]
+ ],
+ "product_option_groups": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "slug",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "product_id",
+   "uuid",
+   "FK→products NOT NULL"
+  ],
+  [
+   "list_id",
+   "uuid",
+   "FK→option_lists NOT NULL"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "min_select",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "max_select",
+   "integer",
+   ""
+  ],
+  [
+   "free_quantity",
+   "integer",
+   ""
+  ],
+  [
+   "extra_unit_price_cents",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "allow_repeat",
+   "boolean",
+   "NOT NULL DEFAULT false"
+  ],
+  [
+   "sort",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ]
+ ],
+ "ingredients": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "unit",
+   "measure_unit",
+   "NOT NULL"
+  ],
+  [
+   "on_hand",
+   "numeric(12, 3)",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "reserved",
+   "numeric(12, 3)",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "minimum",
+   "numeric(12, 3)",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "active",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ],
+  [
+   "updated_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "variant_ingredients": [
+  [
+   "variant_id",
+   "uuid",
+   "FK→product_variants NOT NULL"
+  ],
+  [
+   "ingredient_id",
+   "uuid",
+   "FK→ingredients NOT NULL"
+  ],
+  [
+   "quantity",
+   "numeric(12, 3)",
+   "NOT NULL"
+  ]
+ ],
+ "option_ingredients": [
+  [
+   "option_id",
+   "uuid",
+   "FK→options NOT NULL"
+  ],
+  [
+   "ingredient_id",
+   "uuid",
+   "FK→ingredients NOT NULL"
+  ],
+  [
+   "quantity",
+   "numeric(12, 3)",
+   "NOT NULL"
+  ]
+ ],
+ "customer_addresses": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "user_id",
+   "uuid",
+   "FK→profiles NOT NULL"
+  ],
+  [
+   "label",
+   "text",
+   ""
+  ],
+  [
+   "street",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "number",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "district",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "complement",
+   "text",
+   ""
+  ],
+  [
+   "reference",
+   "text",
+   ""
+  ],
+  [
+   "city",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "state",
+   "char(2)",
+   "NOT NULL"
+  ],
+  [
+   "postal_code",
+   "text",
+   ""
+  ],
+  [
+   "latitude",
+   "double precision",
+   "NOT NULL"
+  ],
+  [
+   "longitude",
+   "double precision",
+   "NOT NULL"
+  ],
+  [
+   "formatted_address",
+   "text",
+   ""
+  ],
+  [
+   "geocoded_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "consents": [
+  [
+   "id",
+   "bigint",
+   "PK NOT NULL"
+  ],
+  [
+   "user_id",
+   "uuid",
+   "FK→profiles NOT NULL"
+  ],
+  [
+   "purpose",
+   "consent_purpose",
+   "NOT NULL"
+  ],
+  [
+   "granted",
+   "boolean",
+   "NOT NULL"
+  ],
+  [
+   "policy_version",
+   "text",
+   ""
+  ],
+  [
+   "source",
+   "text",
+   "NOT NULL DEFAULT 'web'"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "data_requests": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "user_id",
+   "uuid",
+   "FK→profiles NOT NULL"
+  ],
+  [
+   "kind",
+   "data_request_kind",
+   "NOT NULL"
+  ],
+  [
+   "details",
+   "text",
+   ""
+  ],
+  [
+   "status",
+   "text",
+   "NOT NULL DEFAULT 'open'"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ],
+  [
+   "resolved_at",
+   "timestamptz",
+   ""
+  ]
+ ],
+ "campaigns": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "starts_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "ends_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "coupons": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "code",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "campaign_id",
+   "uuid",
+   "FK→campaigns"
+  ],
+  [
+   "kind",
+   "coupon_kind",
+   "NOT NULL"
+  ],
+  [
+   "value",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "active",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ],
+  [
+   "min_subtotal_cents",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "max_discount_cents",
+   "integer",
+   ""
+  ],
+  [
+   "starts_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "ends_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "max_redemptions",
+   "integer",
+   ""
+  ],
+  [
+   "per_customer_limit",
+   "integer",
+   ""
+  ],
+  [
+   "first_order_only",
+   "boolean",
+   "NOT NULL DEFAULT false"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "banners": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "campaign_id",
+   "uuid",
+   "FK→campaigns"
+  ],
+  [
+   "title",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "image_path",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "link_url",
+   "text",
+   ""
+  ],
+  [
+   "sort",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "active",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ],
+  [
+   "starts_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "ends_at",
+   "timestamptz",
+   ""
+  ]
+ ],
+ "orders": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "seq",
+   "bigint",
+   "UNIQUE"
+  ],
+  [
+   "code",
+   "text",
+   ""
+  ],
+  [
+   "public_token",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "idempotency_key",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "customer_id",
+   "uuid",
+   "FK→profiles"
+  ],
+  [
+   "contact_name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "contact_phone",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "contact_email",
+   "text",
+   ""
+  ],
+  [
+   "status",
+   "order_status",
+   "NOT NULL DEFAULT 'awaiting_payment'"
+  ],
+  [
+   "fulfillment",
+   "fulfillment_type",
+   "NOT NULL"
+  ],
+  [
+   "delivery_address",
+   "jsonb",
+   ""
+  ],
+  [
+   "delivery_latitude",
+   "double precision",
+   ""
+  ],
+  [
+   "delivery_longitude",
+   "double precision",
+   ""
+  ],
+  [
+   "delivery_distance_km",
+   "numeric(6, 3)",
+   ""
+  ],
+  [
+   "subtotal_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "discount_cents",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "delivery_fee_cents",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "total_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "coupon_id",
+   "uuid",
+   "FK→coupons"
+  ],
+  [
+   "notes",
+   "text",
+   ""
+  ],
+  [
+   "estimated_ready_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "refund_required",
+   "boolean",
+   "NOT NULL DEFAULT false"
+  ],
+  [
+   "status_changed_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "order_items": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "order_id",
+   "uuid",
+   "FK→orders NOT NULL"
+  ],
+  [
+   "product_id",
+   "uuid",
+   "FK→products"
+  ],
+  [
+   "variant_id",
+   "uuid",
+   "FK→product_variants"
+  ],
+  [
+   "product_name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "variant_name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "quantity",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "base_price_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "extras_cents",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "unit_price_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "total_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "notes",
+   "text",
+   ""
+  ]
+ ],
+ "order_item_options": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "order_item_id",
+   "uuid",
+   "FK→order_items NOT NULL"
+  ],
+  [
+   "option_id",
+   "uuid",
+   "FK→options"
+  ],
+  [
+   "group_name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "option_name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "quantity",
+   "integer",
+   "NOT NULL DEFAULT 1"
+  ],
+  [
+   "charged_cents",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ]
+ ],
+ "order_status_history": [
+  [
+   "id",
+   "bigint",
+   "PK NOT NULL"
+  ],
+  [
+   "order_id",
+   "uuid",
+   "FK→orders NOT NULL"
+  ],
+  [
+   "from_status",
+   "order_status",
+   ""
+  ],
+  [
+   "to_status",
+   "order_status",
+   "NOT NULL"
+  ],
+  [
+   "actor",
+   "actor_type",
+   "NOT NULL"
+  ],
+  [
+   "actor_id",
+   "uuid",
+   "FK→profiles"
+  ],
+  [
+   "note",
+   "text",
+   ""
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "coupon_redemptions": [
+  [
+   "id",
+   "bigint",
+   "PK NOT NULL"
+  ],
+  [
+   "coupon_id",
+   "uuid",
+   "FK→coupons NOT NULL"
+  ],
+  [
+   "order_id",
+   "uuid",
+   "FK→orders NOT NULL UNIQUE"
+  ],
+  [
+   "customer_id",
+   "uuid",
+   "FK→profiles"
+  ],
+  [
+   "discount_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "order_status_transitions": [
+  [
+   "from_status",
+   "order_status",
+   "NOT NULL"
+  ],
+  [
+   "to_status",
+   "order_status",
+   "NOT NULL"
+  ],
+  [
+   "actors",
+   "actor_type[]",
+   "NOT NULL"
+  ],
+  [
+   "only_fulfillment",
+   "fulfillment_type",
+   ""
+  ]
+ ],
+ "payments": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "order_id",
+   "uuid",
+   "FK→orders NOT NULL"
+  ],
+  [
+   "provider",
+   "text",
+   "NOT NULL DEFAULT 'mercadopago'"
+  ],
+  [
+   "provider_payment_id",
+   "text",
+   ""
+  ],
+  [
+   "idempotency_key",
+   "text",
+   "NOT NULL UNIQUE"
+  ],
+  [
+   "method",
+   "payment_method",
+   "NOT NULL"
+  ],
+  [
+   "status",
+   "payment_status",
+   "NOT NULL DEFAULT 'pending'"
+  ],
+  [
+   "status_detail",
+   "text",
+   ""
+  ],
+  [
+   "amount_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "fee_cents",
+   "integer",
+   ""
+  ],
+  [
+   "net_amount_cents",
+   "integer",
+   ""
+  ],
+  [
+   "approved_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "expires_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "raw",
+   "jsonb",
+   ""
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ],
+  [
+   "updated_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "refunds": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "payment_id",
+   "uuid",
+   "FK→payments NOT NULL"
+  ],
+  [
+   "provider_refund_id",
+   "text",
+   "UNIQUE"
+  ],
+  [
+   "amount_cents",
+   "integer",
+   "NOT NULL"
+  ],
+  [
+   "status",
+   "text",
+   "NOT NULL DEFAULT 'pending'"
+  ],
+  [
+   "reason",
+   "text",
+   ""
+  ],
+  [
+   "requested_by",
+   "uuid",
+   "FK→profiles"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "webhook_events": [
+  [
+   "id",
+   "bigint",
+   "PK NOT NULL"
+  ],
+  [
+   "provider",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "event_id",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "topic",
+   "text",
+   ""
+  ],
+  [
+   "resource_id",
+   "text",
+   ""
+  ],
+  [
+   "payload",
+   "jsonb",
+   "NOT NULL"
+  ],
+  [
+   "signature_valid",
+   "boolean",
+   "NOT NULL"
+  ],
+  [
+   "received_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ],
+  [
+   "processed_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "error",
+   "text",
+   ""
+  ]
+ ],
+ "print_devices": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "name",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "paper_width_mm",
+   "smallint",
+   "NOT NULL DEFAULT 80"
+  ],
+  [
+   "key_hash",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "active",
+   "boolean",
+   "NOT NULL DEFAULT true"
+  ],
+  [
+   "last_seen_at",
+   "timestamptz",
+   ""
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "print_jobs": [
+  [
+   "id",
+   "uuid",
+   "PK NOT NULL DEFAULT gen_random_uuid()"
+  ],
+  [
+   "order_id",
+   "uuid",
+   "FK→orders NOT NULL"
+  ],
+  [
+   "device_id",
+   "uuid",
+   "FK→print_devices"
+  ],
+  [
+   "reason",
+   "text",
+   "NOT NULL DEFAULT 'auto'"
+  ],
+  [
+   "status",
+   "print_status",
+   "NOT NULL DEFAULT 'queued'"
+  ],
+  [
+   "attempts",
+   "integer",
+   "NOT NULL DEFAULT 0"
+  ],
+  [
+   "error",
+   "text",
+   ""
+  ],
+  [
+   "requested_by",
+   "uuid",
+   "FK→profiles"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ],
+  [
+   "printed_at",
+   "timestamptz",
+   ""
+  ]
+ ],
+ "stock_movements": [
+  [
+   "id",
+   "bigint",
+   "PK NOT NULL"
+  ],
+  [
+   "ingredient_id",
+   "uuid",
+   "FK→ingredients NOT NULL"
+  ],
+  [
+   "order_id",
+   "uuid",
+   "FK→orders"
+  ],
+  [
+   "kind",
+   "stock_movement_kind",
+   "NOT NULL"
+  ],
+  [
+   "delta",
+   "numeric(12, 3)",
+   "NOT NULL"
+  ],
+  [
+   "idempotency_key",
+   "text",
+   "UNIQUE"
+  ],
+  [
+   "note",
+   "text",
+   ""
+  ],
+  [
+   "created_by",
+   "uuid",
+   "FK→profiles"
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ],
+ "audit_log": [
+  [
+   "id",
+   "bigint",
+   "PK NOT NULL"
+  ],
+  [
+   "actor_id",
+   "uuid",
+   "FK→profiles"
+  ],
+  [
+   "action",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "entity",
+   "text",
+   "NOT NULL"
+  ],
+  [
+   "entity_id",
+   "text",
+   ""
+  ],
+  [
+   "data",
+   "jsonb",
+   ""
+  ],
+  [
+   "created_at",
+   "timestamptz",
+   "NOT NULL DEFAULT now()"
+  ]
+ ]
+}
