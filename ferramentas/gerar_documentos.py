@@ -374,6 +374,7 @@ def entrega():
     ], [4.2, 8.8, 2], tam=9)
 
     p = d.add_paragraph(); p.add_run("Laudo de Qualidade").bold = True
+    p = d.add_paragraph(); r = p.add_run("RASCUNHO – substituir nomes, datas e resultados pelos testes reais dos colegas antes da entrega."); r.italic = True
     for nome, data, ok, nok, nt in C.LAUDO:
         tabela(d, [f"Nome: {nome}", f"Data do teste: {data}"], [
             ("O que testou e funcionou:", ok),

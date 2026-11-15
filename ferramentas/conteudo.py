@@ -188,5 +188,26 @@ PROBLEMAS_CORRIGIDOS = [
     ("Função interna de estoque podia ser executada por usuário anônimo.", "Permissão revogada e privilégios padrão ajustados (migração de segurança)."),
 ]
 
-# Laudo de qualidade: preencher com as respostas reais dos 5 colegas (nome, data, funcionou, não funcionou, não testado)
-LAUDO = [("", "", "", "", "")] * 5
+# Laudo de qualidade — RASCUNHO para adaptação: substituir nomes, datas e resultados pelos testes reais dos colegas.
+LAUDO = [
+    ("Testador 1 (substituir)", "__/__/2026",
+     "• Cardápio: navegar pelas categorias e abrir produtos\n• Configurador: escolher tamanho, acompanhamentos, cobertura e fruta; limites e preço extra\n• Carrinho: redirecionamento após adicionar, alterar quantidade e remover",
+     "Nenhum problema encontrado (ajustar conforme o teste real).",
+     "Pagamento real (não foi efetuado pagamento)."),
+    ("Testador 2 (substituir)", "__/__/2026",
+     "• Cadastro com e-mail e confirmação\n• Login com Google e com e-mail; recuperação de senha\n• Minha conta: editar dados e consultar privacidade (LGPD)",
+     "Nenhum problema encontrado (ajustar conforme o teste real).",
+     "Exclusão de conta (não solicitada no teste)."),
+    ("Testador 3 (substituir)", "__/__/2026",
+     "• Checkout com entrega: endereço, confirmação no mapa e cálculo do frete por distância\n• Checkout com retirada: endereço não é exigido\n• Tela de pagamento Pix (QR Code e copiar código) sem pagar",
+     "Nenhum problema encontrado (ajustar conforme o teste real).",
+     "Pagamento com cartão de crédito e estorno."),
+    ("Testador 4 (substituir)", "__/__/2026",
+     "• Cupom inexistente removido automaticamente com aviso\n• Loja fechada: carrinho permitido, envio bloqueado com horário exibido\n• Botão do WhatsApp e páginas de Privacidade, Termos e Cancelamento",
+     "Nenhum problema encontrado (ajustar conforme o teste real).",
+     "Cupom válido de campanha (nenhum ativo no dia do teste)."),
+    ("Testador 5 (substituir)", "__/__/2026",
+     "• Instalação como aplicativo (PWA) no celular\n• Navegação no computador e no celular (layout responsivo)\n• Abertura do link pelo navegador do Instagram",
+     "Nenhum problema encontrado (ajustar conforme o teste real).",
+     "Painel administrativo e painel de pedidos (acesso restrito à equipe)."),
+]

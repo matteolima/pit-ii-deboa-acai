@@ -19,6 +19,8 @@ O sistema está em produção, com vendas reais, desde novembro de 2026.
 |---|---|
 | Documentação do projeto (Soluções 1, 2 e 3) | [docs/Documentacao-PIT-II-Claudio-Matteo.docx](docs/Documentacao-PIT-II-Claudio-Matteo.docx) |
 | Entrega (dados do estudante, repositório, codificação e testes) | [docs/Entrega-PIT-II-Claudio-Matteo.docx](docs/Entrega-PIT-II-Claudio-Matteo.docx) |
+| Versões em PDF | [Documentação (PDF)](docs/Documentacao-PIT-II-Claudio-Matteo.pdf) · [Entrega (PDF)](docs/Entrega-PIT-II-Claudio-Matteo.pdf) |
+| Vídeo narrado da solução (5 min) | [video/video-solucao-pit-ii-deboa-acai.mp4](video/video-solucao-pit-ii-deboa-acai.mp4) |
 | Diagramas UML (casos de uso, classes, sequências) e mapas | [diagramas/](diagramas/) |
 | Wireframes (baixa fidelidade) | [wireframes/](wireframes/) |
 | Mockups (telas oficiais do site) | [mockups/](mockups/) |
